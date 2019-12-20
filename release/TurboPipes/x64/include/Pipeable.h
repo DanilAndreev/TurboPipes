@@ -4,23 +4,26 @@
 #include <string>
 #include "Threadable.h"
 
-using namespace std;
+namespace TurboPipes {
+	using namespace std;
 
-class PipeDispatcher;
+	class PipeDispatcher;
 
-class Pipeable : private Threadable{
-private:
-	queue<wstring> messages;
-protected:
-	PipeDispatcher* dispatcher;
-public:
-	Pipeable();
-	~Pipeable();
-	void connect(PipeDispatcher* dispatcher);
-	void queueMessage(wstring message);
-private:
-	void threadFunction() override;
-	void handler();
-public:
-	virtual void handleMessage(wstring& message) = 0;
-};
+	class Pipeable : private Threadable {
+	private:
+		queue<byte*> messages;
+	protected:
+		PipeDispatcher* dispatcher;
+	public:
+		Pipeable();
+		~Pipeable();
+		void connect(PipeDispatcher* dispatcher);
+		void queueMessage(byte* message);
+		using Threadable::getThreadHandle;
+	private:
+		void threadFunction() override;
+		void handler();
+	public:
+		virtual void handleMessage(byte* message) = 0;
+	};
+}

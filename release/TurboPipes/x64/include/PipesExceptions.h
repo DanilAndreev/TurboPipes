@@ -2,45 +2,47 @@
 /* Copyright 2019 Andrieiev Danil */
 #include <exception>
 
-using namespace std;
 
-class PipeException : public exception {
-	const char* what() const override { return "Error: PipeException"; }
-};
+namespace TurboPipes {
+	using namespace std;
 
-class PipeCreationException : public PipeException {
-	const char* what() const override { return "Error: PipeCreationException"; }
-};
+	class PipeException : public exception {
+		const char* what() const override { return "Error: PipeException"; }
+	};
 
-class PipeConnectionException : public PipeException {
-	const char* what() const override { return "Error: PipeConnectionException"; }
-};
+	class PipeCreationException : public PipeException {
+		const char* what() const override { return "Error: PipeCreationException"; }
+	};
 
-class PipeWritingException : public PipeException {
-	const char* what() const override { return "Error: PipeWritingException"; }
-};
+	class PipeConnectionException : public PipeException {
+		const char* what() const override { return "Error: PipeConnectionException"; }
+	};
 
-class PipeNoDataException : public PipeConnectionException {
-	const char* what() const override { return "Error: PipeNoDataException"; }
-};
+	class PipeWritingException : public PipeException {
+		const char* what() const override { return "Error: PipeWritingException"; }
+	};
 
-class PipeConnectedException : public PipeConnectionException {
-	const char* what() const override { return "Error: PipeConnectedException"; }
-};
+	class PipeNoDataException : public PipeConnectionException {
+		const char* what() const override { return "Error: PipeNoDataException"; }
+	};
 
-class PipeListeningException : public PipeConnectionException {
-	const char* what() const override { return "Error: PipeListeningException"; }
-};
+	class PipeConnectedException : public PipeConnectionException {
+		const char* what() const override { return "Error: PipeConnectedException"; }
+	};
 
-class PipeCallNotImplementedException : public PipeConnectionException {
-	const char* what() const override { return "Error: PipeCallNotImplementedException"; }
-};
+	class PipeListeningException : public PipeConnectionException {
+		const char* what() const override { return "Error: PipeListeningException"; }
+	};
 
-class PipeReadingException : public PipeConnectionException {
-	const char* what() const override { return "Error: PipeReadingException"; }
-};
+	class PipeCallNotImplementedException : public PipeConnectionException {
+		const char* what() const override { return "Error: PipeCallNotImplementedException"; }
+	};
 
-class PipeLostConnectionException: public PipeConnectionException {
-	const char* what() const override { return "Error: PipeLostConnectionException"; }
-};
+	class PipeReadingException : public PipeConnectionException {
+		const char* what() const override { return "Error: PipeReadingException"; }
+	};
 
+	class PipeLostConnectionException : public PipeConnectionException {
+		const char* what() const override { return "Error: PipeLostConnectionException"; }
+	};
+}
