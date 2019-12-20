@@ -72,14 +72,13 @@ PipeDispatcher::~PipeDispatcher() {
 }
 
 void PipeDispatcher::throwMessage(wstring message) {
-	BOOL isWritten = WriteFile(hNamedPipe, message.c_str(), message.length() + 1, &cbWritten, NULL);
+	BOOL isWritten = WriteFile(hNamedPipe, message.c_str(), (message.length() + 1)*sizeof(wchar_t), &cbWritten, NULL);
 	if (!isWritten) {
 		throw PipeWritingException();
 	}
 }
 
 wstring PipeDispatcher::catchMessage() {
-	//wchar_t buff[1024];
 	wstring buffer;
 
 	DWORD bytesAvail = 0;
@@ -93,9 +92,10 @@ wstring PipeDispatcher::catchMessage() {
 			if (!isRead) {
 				throw PipeReadingException();
 			}
+			buffer = (wchar_t*)data;
 			//buffer = reinterpret_cast<wchar_t*>(data);
-			wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
-			buffer = converter.from_bytes((char*)data);
+			//wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
+			//buffer = converter.from_bytes((char*)data);
 			delete[] data;
 			return buffer;
 		}
