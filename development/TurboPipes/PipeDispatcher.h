@@ -34,10 +34,3 @@ protected:
 	void messagesHandler();
 	void threadFunction() override;
 };
-
-class TPipeable : public Pipeable {
-	void handleMessage(wstring& message) override {
-		wcout << "----------------------caugth message: " << message << endl;
-		this->dispatcher->throwMessage(message);
-	}
-};
