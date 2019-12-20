@@ -10,17 +10,17 @@ class PipeDispatcher;
 
 class Pipeable : private Threadable{
 private:
-	queue<wstring> messages;
+	queue<byte*> messages;
 protected:
 	PipeDispatcher* dispatcher;
 public:
 	Pipeable();
 	~Pipeable();
 	void connect(PipeDispatcher* dispatcher);
-	void queueMessage(wstring message);
+	void queueMessage(byte* message);
 private:
 	void threadFunction() override;
 	void handler();
 public:
-	virtual void handleMessage(wstring& message) = 0;
+	virtual void handleMessage(byte* message) = 0;
 };

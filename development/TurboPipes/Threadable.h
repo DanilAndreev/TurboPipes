@@ -9,7 +9,7 @@ private:
 	HANDLE threadHandle;
 public:
 	Threadable();
-	~Threadable();
+	virtual ~Threadable();
 	void startThread();
 	void stopThread();
 	HANDLE getThreadHandle();

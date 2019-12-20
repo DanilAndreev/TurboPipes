@@ -13,8 +13,8 @@ PipeDispatcher::PipeDispatcher(wstring szPipeName, bool is_server, Pipeable* obj
 			PIPE_ACCESS_DUPLEX,
 			PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
 			PIPE_UNLIMITED_INSTANCES,
-			1024, 
-			1024,
+			BUFFER_SIZE,
+			BUFFER_SIZE,
 			TIMEOUT,
 			NULL);
 		if (this->hNamedPipe == INVALID_HANDLE_VALUE) {
@@ -71,45 +71,43 @@ PipeDispatcher::~PipeDispatcher() {
 	CloseHandle(this->hNamedPipe);
 }
 
-void PipeDispatcher::throwMessage(wstring message) {
-	BOOL isWritten = WriteFile(hNamedPipe, message.c_str(), (message.length() + 1)*sizeof(wchar_t), &cbWritten, NULL);
+void PipeDispatcher::throwMessage(byte* message, DWORD length) {
+	BOOL isWritten = WriteFile(hNamedPipe, message, length, &cbWritten, NULL);
 	if (!isWritten) {
 		throw PipeWritingException();
 	}
 }
 
-wstring PipeDispatcher::catchMessage() {
-	wstring buffer;
-
+byte* PipeDispatcher::catchMessage() {
 	DWORD bytesAvail = 0;
 	DWORD bytesMessage = 0;
+	byte* message = nullptr;
 
 	while (!bytesAvail) {
 		PeekNamedPipe(hNamedPipe, NULL, 0, NULL, &bytesAvail, &bytesMessage);
 		if (bytesAvail) {
-			byte* data = new byte[bytesAvail];
-			BOOL isRead = ReadFile(hNamedPipe, data, bytesAvail, &cbRead, NULL);
+			message = new byte[bytesAvail];
+			BOOL isRead = ReadFile(hNamedPipe, message, bytesAvail, &cbRead, NULL);
 			if (!isRead) {
 				throw PipeReadingException();
 			}
-			buffer = (wchar_t*)data;
+			//buffer = (wchar_t*)data;
 			//buffer = reinterpret_cast<wchar_t*>(data);
 			//wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
 			//buffer = converter.from_bytes((char*)data);
-			delete[] data;
-			return buffer;
+			return message;
 		}
 		else {
 			Sleep(10);
 		}
 	}
-	return buffer;
+	return message;
 }
 
 void PipeDispatcher::messagesHandler() {
 	while (this->isRunning()) {
 		try {
-			wstring message = this->catchMessage();
+			byte* message = this->catchMessage();
 			this->object->queueMessage(message);
 		}
 		catch (PipeReadingException e) {

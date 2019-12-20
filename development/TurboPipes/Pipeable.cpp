@@ -10,7 +10,7 @@ void Pipeable::connect(PipeDispatcher* dispatcher) {
 	this->dispatcher = dispatcher;
 }
 
-void Pipeable::queueMessage(wstring message) {
+void Pipeable::queueMessage(byte* message) {
 	this->messages.push(message);
 }
 
@@ -24,7 +24,7 @@ void Pipeable::handler() {
 			Sleep(10);
 		}
 		else {
-			wstring message = this->messages.back();
+			byte* message = this->messages.back();
 			this->messages.pop();
 			this->handleMessage(message);
 		}

@@ -15,6 +15,7 @@ using namespace std;
 class PipeDispatcher : public Threadable{
 private:
 	static const DWORD TIMEOUT = 5000;
+	static const DWORD BUFFER_SIZE = 1024;
 private:
 	HANDLE hNamedPipe;
 	DWORD cbWritten;
@@ -28,9 +29,12 @@ protected:
 public:
 	PipeDispatcher(wstring szPipeName, bool is_server, Pipeable* object);
 	~PipeDispatcher();
-	void throwMessage(wstring message);
+	void throwMessage(byte* message, DWORD length);
 protected:
-	wstring catchMessage();
+	byte* catchMessage();
 	void messagesHandler();
 	void threadFunction() override;
+protected:  // copying restricted
+	PipeDispatcher(const PipeDispatcher& reference) {}
+	PipeDispatcher& operator= (const PipeDispatcher& reference) {}
 };
