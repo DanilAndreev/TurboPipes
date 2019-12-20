@@ -9,7 +9,7 @@ namespace TurboPipes {
 		PipeDispatcherString(wstring szPipeName, bool is_server, PipeableString* object);
 		~PipeDispatcherString();
 		void throwMessage(wstring& message);
-		using Threadable::getThreadHandle;
+		using PipeDispatcher::getThreadHandle;
 	protected:
 		wstring catchMessage();
 	protected:

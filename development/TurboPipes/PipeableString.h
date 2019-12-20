@@ -4,7 +4,7 @@
 namespace TurboPipes {
 	class PipeDispatcherString;
 
-	class PipeableString : public Pipeable {
+	class PipeableString : private Pipeable {
 	protected:
 		PipeDispatcherString* dispatcher;
 	public:
@@ -13,6 +13,7 @@ namespace TurboPipes {
 		void connect(PipeDispatcherString* dispatcher);
 		void queueMessage(wstring message);
 		using Pipeable::queueMessage;
+		using Pipeable::getThreadHandle;
 	public:
 		virtual void handleMessage(wstring& message) = 0;
 	private:

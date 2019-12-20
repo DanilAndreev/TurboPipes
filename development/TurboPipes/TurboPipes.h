@@ -2,7 +2,7 @@
 /*
 Copyright 2019 Andrieiev Danil
 TurboPipes library for c++ pipes
-version 1.0.0
+version 1.1.0
 */
 
 #include "PipesExceptions.h"

@@ -9,7 +9,7 @@ namespace TurboPipes {
 
 	class PipeDispatcher;
 
-	class Pipeable : public Threadable {
+	class Pipeable : private Threadable {
 	private:
 		queue<byte*> messages;
 	protected:
