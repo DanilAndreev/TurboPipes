@@ -20,12 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pipeable.cpp" />
+    <ClCompile Include="PipeableString.cpp" />
     <ClCompile Include="PipeDispatcher.cpp" />
+    <ClCompile Include="PipeDispatcherString.cpp" />
     <ClCompile Include="Threadable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pipeable.h" />
+    <ClInclude Include="PipeableString.h" />
     <ClInclude Include="PipeDispatcher.h" />
+    <ClInclude Include="PipeDispatcherString.h" />
     <ClInclude Include="PipesExceptions.h" />
     <ClInclude Include="Threadable.h" />
     <ClInclude Include="TurboPipes.h" />
