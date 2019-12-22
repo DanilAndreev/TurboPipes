@@ -1,5 +1,7 @@
 #include "PipeDispatcher.h"
 
+const int TIMEOUT_CONNECT_ATTEMPTS = 30;
+const size_t CONNECTING_SLEEP_TIME = 100;
 
 namespace TurboPipes {
 	PipeDispatcher::PipeDispatcher(wstring szPipeName, bool is_server, Pipeable* object) : pipeName(szPipeName), object(object) {
@@ -54,16 +56,23 @@ namespace TurboPipes {
 			}
 		}
 		else {
-			this->hNamedPipe = CreateFile(
-				this->pipeName.c_str(),
-				GENERIC_READ | GENERIC_WRITE,
-				0,
-				NULL,
-				OPEN_EXISTING,
-				0,
-				NULL);
-			if (this->hNamedPipe == INVALID_HANDLE_VALUE) {
-				throw PipeConnectionException();
+			int attempts = 0;
+			bool connecting_flag = true;
+			while (attempts <= TIMEOUT_CONNECT_ATTEMPTS + 1 && connecting_flag) {
+				this->hNamedPipe = CreateFile(
+					this->pipeName.c_str(),
+					GENERIC_READ | GENERIC_WRITE,
+					0,
+					NULL,
+					OPEN_EXISTING,
+					0,
+					NULL);
+				if (this->hNamedPipe == INVALID_HANDLE_VALUE && attempts >= TIMEOUT_CONNECT_ATTEMPTS) {
+					throw PipeConnectionException();
+				}
+				if (this->hNamedPipe != INVALID_HANDLE_VALUE) {
+					connecting_flag = false;
+				}
 			}
 		}
 	}
@@ -93,10 +102,6 @@ namespace TurboPipes {
 				if (!isRead) {
 					throw PipeReadingException();
 				}
-				//buffer = (wchar_t*)data;
-				//buffer = reinterpret_cast<wchar_t*>(data);
-				//wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
-				//buffer = converter.from_bytes((char*)data);
 				return message;
 			}
 			else {
