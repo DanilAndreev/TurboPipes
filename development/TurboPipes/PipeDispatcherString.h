@@ -17,8 +17,9 @@
 	  misrepresented as being the original source code.
    3. This notice may not be removed or altered from any source distribution.
    Andrieiev Danil danssg08@gmail.com
-   version 1.1.2
-*/#include "PipeDispatcher.h"
+   version 1.1.3
+*/
+#include "PipeDispatcher.h"
 #include "PipeableString.h"
 
 
@@ -29,6 +30,7 @@ namespace TurboPipes {
 		~PipeDispatcherString();
 		void throwMessage(wstring& message);
 		using PipeDispatcher::getThreadHandle;
+		using PipeDispatcher::stopThread;
 	protected:
 		wstring catchMessage();
 	protected:
